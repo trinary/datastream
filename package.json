@@ -1,0 +1,9 @@
+{
+  "name"        : "dataproj",
+  "description" : "I don't actually know yet",
+  "version"     : "0.0.1",
+  "author"      : "Erik Cunningham (@trinary)",
+  "dependencies": {
+    "mongodb" : "0.9.6"
+  }
+}
