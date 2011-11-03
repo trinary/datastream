@@ -1,9 +1,11 @@
 {
-  "name"        : "dataproj",
-  "description" : "I don't actually know yet",
-  "version"     : "0.0.1",
-  "author"      : "Erik Cunningham (@trinary)",
-  "dependencies": {
-    "mongodb" : "0.9.6"
+  "name"          : "dataproj",
+  "description"   : "I don't actually know yet",
+  "version"       : "0.0.1",
+  "author"        : "Erik Cunningham (@trinary)",
+  "dependencies"  : {
+    "mongodb"     : "0.9.6-23",
+    "express"     : "2.5.0",
+    "socket.io"   :"0.8.6"
   }
 }
