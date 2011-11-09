@@ -3,21 +3,27 @@ Db = require('mongodb').Db
 Server = require('mongodb').Server
 
 
-
-
 class exports.Dataset
-  constructor: (@name) ->
+  constructor: ->
     host = 'localhost'
     port = 27017
     server = new Server host, port, {}
     @mongo = new Db 'dataproj', server
-    @mongo.open (err,db) ->
-      db.createCollection(@name, (err, coll) =>
-        console.log "created #{coll}"
-        @coll = coll
-      )
-  insert: (obj) ->
-    console.log @mongo
+
+  new: (collname) ->
     @mongo.open (err, db) ->
-      db.collection @name, (err, coll) ->
+      db.collection(collname, (err, coll) ->
+        if err
+          console.log err
+      )
+
+  insert: (obj, collname) ->
+    @mongo.open (err,db) ->
+      db.collection(collname, (err, coll) ->
+        if err
+          console.log err
+          return
         coll.insert(obj)
+      )
+
+
