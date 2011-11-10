@@ -44,7 +44,7 @@ app.post '/sets/:name/data', (req, res) =>
     href: "http://localhost:3000/sets/#{req.params.name}/data"
 
 app.get '/', (req,res) ->
-  res.sendfile __dirname + '/index.html'
+  res.sendfile __dirname + '/static/index.html'
 
 
 
