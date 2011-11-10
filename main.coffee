@@ -1,5 +1,5 @@
 express = require 'express'
-dataset = require './dataset'
+dataset = require './lib/dataset'
 util = require 'util'
 
 app = express.createServer()
