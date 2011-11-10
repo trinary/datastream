@@ -37,7 +37,22 @@ time.  This is basically an excuse for me to learn d3.
 * be running mongo locally, have node, npm, and coffeescript working
 * npm install
 * coffee main.coffee
-* load http://127.0.0.1:3000/
+* load http://127.0.0.1:3000/sets/SETNAME/data
 * POST data to port 3000 with Content-Type: application/json
 * see data in your DOM/console/whatever index.html happens to be doing
   with it
+
+#### Todo:
+* Subscribe to individual streams from the browser
+* Emit data event per collection to subscribed clients
+* Common vis toolkit in client size library:
+  * Associate a pre-made vis with one or more streams
+  * Current Value (text)
+  * Box plot
+  * Line/Area
+  * Stacked Bars
+  * Correlation between two sets
+* Time range selector for historical mining
+* Simple attribute filtering
+* Aggregation, map/reduce as custom event stream (Mongo Aggregation
+  Framework?)
