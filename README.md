@@ -43,6 +43,7 @@ time.  This is basically an excuse for me to learn d3.
   with it
 
 #### Todo:
+* A better name, I am bad at this
 * Subscribe to individual streams from the browser
 * Emit data event per collection to subscribed clients
 * Common vis toolkit in client size library:
