@@ -1,26 +1,26 @@
-express = require('express')
+express = require 'express'
 dataset = require './dataset'
+util = require 'util'
 
 app = express.createServer()
 app.use express.bodyParser()
 app.listen(3000)
 
-thing_one = "one"
 
 io = require 'socket.io'
 iosocket = io.listen app
 global_sockets = []
 
-iosocket.sockets.on 'connection',(newsocket) ->
-  console.log "got id #{newsocket.id}"
-  global_sockets[newsocket.id] = newsocket
-  global_sockets[newsocket.id].emit 'welcome', "Hi there."
-  newsocket
+iosocket.sockets.on 'connection',(newsocket) =>
+  id = "#{newsocket.id}"
+  console.log "got id #{id}"
+  global_sockets[id] = newsocket
+  newsocket.emit 'welcome', "Hi there.  You are #{id}"
 
-iosocket.sockets.on 'disconnect', (oldsocket) ->
-  console.log "lost id #{oldsocket.id}"
-  delete global_sockets[oldsocket.id]
-
+iosocket.sockets.on 'disconnect', (oldsocket) =>
+  id = "#{oldsocket.id}"
+  console.log "Disconnecting #{id}"
+  delete global_sockets[id]
 
 app.get '/sets/:name', (req,res) ->
   ds = new dataset.Dataset req.params.name
@@ -33,15 +33,10 @@ app.post '/sets', (req,res) ->
   res.header "Location", loc
   res.send {status: 201, message: "created", href: loc},201
 
-app.post '/sets/:name/data', (req, res) ->
+app.post '/sets/:name/data', (req, res) =>
   ds = new dataset.Dataset
-  console.log "ok gonna INSERT"
-  console.log thing_one
-  console.log global_sockets.size
-  for sock in global_sockets
-    console.log "sending #{req.body} to id #{sock.id}"
-    sock.emit 'data', req.body
-  console.log "w...what?"
+  for id, sock of global_sockets
+    sock.emit 'data',req.body
   ds.insert req.body, req.params.name
   res.send
     status: 201,
