@@ -34,9 +34,10 @@ time.  This is basically an excuse for me to learn d3.
 
 #### Running it:
 * clone
-* be running mongo locally
+* be running mongo locally, have node, npm, and coffeescript working
 * npm install
 * coffee main.coffee
 * load http://127.0.0.1:3000/
-* POST data to port 3000
-* see data in your DOM/console/whatever
+* POST data to port 3000 with Content-Type: application/json
+* see data in your DOM/console/whatever index.html happens to be doing
+  with it
