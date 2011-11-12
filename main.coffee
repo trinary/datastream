@@ -34,10 +34,16 @@ app.post '/sets', (req,res) ->
   res.send {status: 201, message: "created", href: loc},201
 
 app.post '/sets/:name/data', (req, res) =>
+  obj = { set: req.params.name, data: {} }
+  obj.data.value = req.body.value
+  console.log "v: #{req.body.value}, t: #{req.body.timestamp}"
+  obj.data.timestamp = new Date(req.body.timestamp)
+  obj.data.attributes = req.body.attributes if req.body.attributes?
+
   ds = new dataset.Dataset
   for id, sock of global_sockets
-    sock.emit 'data',req.body
-  ds.insert req.body, req.params.name
+    sock.emit 'data', obj
+  ds.insert obj, req.params.name
   res.send
     status: 201,
     message: "added",
@@ -45,7 +51,3 @@ app.post '/sets/:name/data', (req, res) =>
 
 app.get '/', (req,res) ->
   res.sendfile __dirname + '/static/index.html'
-
-
-
-
