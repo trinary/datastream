@@ -25,5 +25,18 @@ class exports.Dataset
           return
         coll.insert(obj)
       )
-
-
+  eachCollection: (fn) ->
+    console.log "listing"
+    list = []
+    @mongo.open (err,db) ->
+      if err
+        console.log err
+        return
+      console.log "collInfo"
+      db.collectionsInfo (err, cursor) ->
+        if err
+          console.log err
+          return
+        cursor.toArray (err,items) ->
+          items.forEach (item) ->
+            fn item

@@ -8,9 +8,15 @@
   console.log("ok here we go");
   socket.on('welcome',function(data) {
     console.log(data);
+    socket.emit('list', function(data) {
+      console.log(data);
+    });
   });
   socket.on('data', function (data) {
     console.log(data);
+  });
+  socket.on('collection', function (data) {
+    $('#data').append(data.name);
   });
 </script>
 </head>

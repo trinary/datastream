@@ -15,15 +15,24 @@ iosocket.sockets.on 'connection',(newsocket) =>
   id = "#{newsocket.id}"
   console.log "got id #{id}"
   global_sockets[id] = newsocket
-  newsocket.emit 'welcome', "Hi there.  You are #{id}"
+  ds = new dataset.Dataset
+  list = []
+  ds.eachCollection (coll) =>
+    if coll.options? && coll.options.create?
+      newsocket.emit 'collection', coll
+  newsocket.emit 'welcome', "Hello."
 
 iosocket.sockets.on 'disconnect', (oldsocket) =>
   id = "#{oldsocket.id}"
   console.log "Disconnecting #{id}"
   delete global_sockets[id]
 
+iosocket.sockets.on 'list', (socket) =>
+  console.log "client #{socket.id} is asking for sets"
+
+
 app.get '/sets/:name', (req,res) ->
-  ds = new dataset.Dataset req.params.name
+  ds = new dataset.Dataset
   res.send {name: req.params.name}, 200
 
 app.post '/sets', (req,res) ->
