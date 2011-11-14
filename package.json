@@ -4,8 +4,10 @@
   "version"       : "0.0.1",
   "author"        : "Erik Cunningham (@trinary)",
   "dependencies"  : {
-    "mongodb"     : "0.9.6-23",
-    "express"     : "2.5.0",
-    "socket.io"   :"0.8.6"
+    "mongodb"          : "0.9.6-23",
+    "express"          : "2.5.0",
+    "socket.io"        : "0.8.6",
+    "coffee-script"    : "1.1.3",
+    "connect-assets"   : "2.1.4"
   }
 }

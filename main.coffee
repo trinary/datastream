@@ -1,15 +1,20 @@
 express = require 'express'
 dataset = require './lib/dataset'
 util = require 'util'
+fs = require 'fs'
+coffee = require 'coffee-script'
+
 
 app = express.createServer()
 app.use express.bodyParser()
+app.use express.static(__dirname + '/static')
 app.listen(3000)
 
 
 io = require 'socket.io'
 iosocket = io.listen app
 global_sockets = []
+subscriptions = []
 
 iosocket.sockets.on 'connection',(newsocket) =>
   id = "#{newsocket.id}"
@@ -27,9 +32,10 @@ iosocket.sockets.on 'disconnect', (oldsocket) =>
   console.log "Disconnecting #{id}"
   delete global_sockets[id]
 
-iosocket.sockets.on 'list', (socket) =>
-  console.log "client #{socket.id} is asking for sets"
-
+iosocket.sockets.on 'subscribe', (name) =>
+  console.log name
+  console.log "name: #{util.inspect name}"
+  subscriptions[name.name].push
 
 app.get '/sets/:name', (req,res) ->
   ds = new dataset.Dataset
@@ -58,5 +64,10 @@ app.post '/sets/:name/data', (req, res) =>
     message: "added",
     href: "http://localhost:3000/sets/#{req.params.name}/data"
 
-app.get '/', (req,res) ->
-  res.sendfile __dirname + '/static/index.html'
+#app.get '/', (req,res) ->
+#  res.sendfile __dirname + '/static/index.html'
+app.get '/javascript/:script.js', (req, res) ->
+  res.header 'Content-Type', 'application/x-javascript'
+  cs = fs.readFileSync "#{__dirname}/coffee/#{req.params.script}.coffee", "ascii"
+  js = coffee.compile cs
+  res.send js
