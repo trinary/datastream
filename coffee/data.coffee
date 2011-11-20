@@ -4,12 +4,11 @@ console.log "ok here we go"
 socket.on 'welcome',(data) ->
   console.log(data)
 socket.on 'data', (data) ->
-  console.log data
   if ! window.data[data.set]?
     window.data[data.set] = []
   window.data[data.set].push {time: data.data.timestamp, value: data.data.value}
-  if window.data[data.set].length > 5
-    window.data[data.set] = window.data[data.set].slice(-5)
+  if window.data[data.set].length > 15
+    window.data[data.set] = window.data[data.set].slice(-15)
   #$('#data ol').append ->
     #    i = $('<li></li>').attr "set", data.set
     #i.text data.data.value
