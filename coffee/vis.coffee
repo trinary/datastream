@@ -3,12 +3,12 @@ $ ->
   h = 80
   x = d3.scale.linear().domain([0,1]).range([0,w])
   y = d3.scale.linear().domain([0,100]).rangeRound([0,h])
-  redraw = ->
+  redraw = (current)->
     console.log "redrawing"
-    console.log "data has #{window.data["asdf"].length} elements"
-    console.log "#{window.data["asdf"][0].time}"
+    console.log "data has #{current.length} elements"
+    console.log "#{current[0].time}"
     rect = chart.selectAll("rect")
-      .data(window.data["asdf"])
+      .data(current, (d) -> console.log this )
     rect.enter().insert("svg:rect", "line")
       .attr("x", (d,i) -> return x(i+1) - 0.5)
       .attr("y", (d) -> h - y(d.value) - .5)
@@ -25,7 +25,7 @@ $ ->
       .attr("x"(d,i) -> x(i-1) - .5)
       .remove()
   setInterval ->
-    redraw()
+    redraw(window.data["asdf"])
   , 2000
   console.log data
   chart = d3.select("body")
