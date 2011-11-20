@@ -5,10 +5,14 @@ $ ->
   y = d3.scale.linear().domain([0,100]).rangeRound([0,h])
   redraw = (current)->
     console.log "redrawing"
-    console.log "data has #{current.length} elements"
+    console.log "current has #{current.length} elements"
     console.log "#{current[0].time}"
     rect = chart.selectAll("rect")
-      .data(current, (d) -> console.log this )
+      .data current,(d,i) ->
+        console.log "d? #{d}"
+        console.log "i? #{i}"
+        d.time
+
     rect.enter().insert("svg:rect", "line")
       .attr("x", (d,i) -> return x(i+1) - 0.5)
       .attr("y", (d) -> h - y(d.value) - .5)
@@ -22,7 +26,7 @@ $ ->
       .attr("x",(d,i) -> x(i) - .5)
     rect.exit().transition()
       .duration(500)
-      .attr("x"(d,i) -> x(i-1) - .5)
+      .attr("x", (d,i) -> x(i-1) - .5)
       .remove()
   setInterval ->
     redraw(window.data["asdf"])
