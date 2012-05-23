@@ -41,8 +41,22 @@ app.get '/sets/:name', (req,res) ->
   ds = new dataset.Dataset
   res.send {name: req.params.name}, 200
 
+app.get '/sets',(req,res) ->
+  ds = new dataset.Dataset
+  list  = {
+    href: '/sets'
+    sets: [
+    ]
+  }
+  ds.eachCollection (col) =>
+    console.log col
+    list.sets.push col.name
+  res.send list, 200
+
+
 app.post '/sets', (req,res) ->
   ds = new dataset.Dataset
+  console.log req.body
   ds.new req.body.set.name
   loc = "http://localhost:3000/sets/#{req.body.set.name}"
   res.header "Location", loc
