@@ -9,11 +9,13 @@ app.use express.bodyParser()
 app.use express.static(__dirname + '/static')
 app.listen(3000)
 
-
 io = require 'socket.io'
 iosocket = io.listen app
 global_sockets = []
 subscriptions = []
+
+iosocket.sockets.on 'test', (d) =>
+  console.log "test", d
 
 iosocket.sockets.on 'connection',(newsocket) =>
   id = "#{newsocket.id}"
@@ -39,13 +41,13 @@ app.get '/sets/:name', (req,res) ->
 app.get '/sets',(req,res) ->
   ds = new dataset.Dataset
   foo = ds.list (sets) => 
-    console.log util.inspect sets
+    console.log "get /sets", util.inspect sets
     res.send {href: '/sets',sets: sets}, 200
 
 
 app.post '/sets', (req,res) ->
   ds = new dataset.Dataset
-  console.log req.body
+  console.log "post /sets", req.body
   ds.new req.body.set.name
   loc = "http://localhost:3000/sets/#{req.body.set.name}"
   res.header "Location", loc
@@ -73,3 +75,8 @@ app.get '/javascript/:script.js', (req, res) ->
   cs = fs.readFileSync "#{__dirname}/coffee/#{req.params.script}.coffee", "ascii"
   js = coffee.compile cs
   res.send js
+
+app.get '/css/:style.css', (req, res) ->
+  res.header 'Content-Type', 'text/css'
+  css = fs.readFileSync "#{__dirname}/css/#{req.params.style}.css", "ascii"
+  res.send css

@@ -1,13 +1,25 @@
 $ ->
+  window.data = []
+  socket = io.connect 'http://localhost:3000'
+  socket.emit 'test',{a: "b"}
+  socket.on 'welcome',(data) ->
+    console.log(data)
+  socket.on 'data', (data) ->
+    console.log "data recieved", data
+    if ! window.data[data.set]?
+      window.data[data.set] = []
+    window.data[data.set].push {time: data.data.timestamp, value: data.data.value}
+    if window.data[data.set].length > 15
+      window.data[data.set] = window.data[data.set].slice(-15)
+  $('.setlist').on 'click',(e) ->
+    console.log "subscribing to #{e.target.id}"
+    socket.emit 'subscribe', {name: e.target.id}
   $.ajax
     url: '/sets'
     success: (d,s,xhr) ->
       list = $('.setlist')
       for i in d.sets
         list.append "<li class='dataset' id='#{i.name}'>#{i.name}</li>"
-      $('.dataset').on 'click',(e) ->
-        console.log "subscribing to #{e.target.id}"
-        window.socket.emit 'subscribe', {name: e.target.id}
     failure: (d,s,xhr) ->
       $('.errors').append "There was an error getting the set list"
 
@@ -15,9 +27,9 @@ $ ->
   h = 80
   x = d3.scale.linear().domain([0,1]).range([0,w])
   y = d3.scale.linear().domain([0,100]).rangeRound([0,h])
+
   redraw = (current)->
-    rect = chart.selectAll("rect").data window.data["asdf"],(d,i) ->
-      d.time
+    rect = chart.selectAll("rect").data window.data["asdf"],(d,i) -> d.time
 
     rect.enter().insert("svg:rect", "line")
       .attr("x", (d,i) -> return x(i+1) - 0.5)
@@ -27,13 +39,16 @@ $ ->
       .transition()
       .duration(500)
       .attr("x", (d,i) -> x(i) - .5)
+
     rect.transition()
       .duration(500)
       .attr("x",(d,i) -> x(i) - .5)
+
     rect.exit().transition()
       .duration(500)
       .attr("x", (d,i) -> x(i-1) - .5)
       .remove()
+
   chart = d3.select("body")
     .append("svg:svg")
     .attr("class","chart")
