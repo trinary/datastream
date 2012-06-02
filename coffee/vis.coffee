@@ -1,14 +1,14 @@
 $ ->
+  console.log "getting 'sets"
   $.ajax
-    url: '/sets',(b) ->
+    url: '/sets'
     success: (d,s,xhr) ->
       console.log "wat"
     failure: (d,s,xhr) ->
-      console.log d,s,xhr
+      console.log "no"
     complete: (d,s,xhr) ->
       console.log "maybe", d
 
-$ ->
   w = 20
   h = 80
   x = d3.scale.linear().domain([0,1]).range([0,w])
