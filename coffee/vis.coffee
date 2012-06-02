@@ -1,13 +1,15 @@
 $ ->
-  console.log "getting 'sets"
   $.ajax
     url: '/sets'
     success: (d,s,xhr) ->
-      console.log "wat"
+      list = $('.setlist')
+      for i in d.sets
+        list.append "<li class='dataset' id='#{i.name}'>#{i.name}</li>"
+      $('.dataset').on 'click',(e) ->
+        console.log "subscribing to #{e.target.id}"
+        window.socket.emit 'subscribe', {name: e.target.id}
     failure: (d,s,xhr) ->
-      console.log "no"
-    complete: (d,s,xhr) ->
-      console.log "maybe", d
+      $('.errors').append "There was an error getting the set list"
 
   w = 20
   h = 80

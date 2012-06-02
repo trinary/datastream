@@ -21,10 +21,6 @@ iosocket.sockets.on 'connection',(newsocket) =>
   global_sockets[id] = newsocket
   ds = new dataset.Dataset
   list = []
-  ds.eachCollection (coll) =>
-    if coll.options? && coll.options.create?
-      newsocket.emit 'collection', coll
-  newsocket.emit 'welcome', "Hello."
 
 iosocket.sockets.on 'disconnect', (oldsocket) =>
   id = "#{oldsocket.id}"
@@ -32,7 +28,7 @@ iosocket.sockets.on 'disconnect', (oldsocket) =>
   delete global_sockets[id]
 
 iosocket.sockets.on 'subscribe', (name) =>
-  console.log name
+  console.log "subscription incoming", name
   console.log "name: #{util.inspect name}"
   subscriptions[name.name].push
 
@@ -58,14 +54,13 @@ app.post '/sets', (req,res) ->
 app.post '/sets/:name/data', (req, res) =>
   obj = { set: req.params.name, data: {} }
   obj.data.value = req.body.value
-  console.log "v: #{req.body.value}, t: #{req.body.timestamp}"
   obj.data.timestamp = new Date(req.body.timestamp)
   obj.data.attributes = req.body.attributes if req.body.attributes?
 
   ds = new dataset.Dataset
-  for id, sock of global_sockets
-    sock.emit 'data', obj
-  ds.insert obj, req.params.name
+  #  for id, sock of global_sockets
+  #    sock.emit 'data', obj
+  #  ds.insert obj, req.params.name
   res.send
     status: 201,
     message: "added",
