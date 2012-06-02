@@ -1,6 +1,5 @@
 window.data = []
 socket = io.connect 'http://localhost:3000'
-console.log "ok here we go"
 socket.on 'welcome',(data) ->
   console.log(data)
 socket.on 'data', (data) ->

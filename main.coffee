@@ -43,15 +43,9 @@ app.get '/sets/:name', (req,res) ->
 
 app.get '/sets',(req,res) ->
   ds = new dataset.Dataset
-  list  = {
-    href: '/sets'
-    sets: [
-    ]
-  }
-  ds.eachCollection (col) =>
-    console.log col
-    list.sets.push col.name
-  res.send list, 200
+  foo = ds.list (sets) => 
+    console.log util.inspect sets
+    res.send {href: '/sets',sets: sets}, 200
 
 
 app.post '/sets', (req,res) ->

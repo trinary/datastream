@@ -1,10 +1,19 @@
 $ ->
+  $.ajax
+    url: '/sets',(b) ->
+    success: (d,s,xhr) ->
+      console.log "wat"
+    failure: (d,s,xhr) ->
+      console.log d,s,xhr
+    complete: (d,s,xhr) ->
+      console.log "maybe", d
+
+$ ->
   w = 20
   h = 80
   x = d3.scale.linear().domain([0,1]).range([0,w])
   y = d3.scale.linear().domain([0,100]).rangeRound([0,h])
   redraw = (current)->
-    console.log "REDRAW"
     rect = chart.selectAll("rect").data window.data["asdf"],(d,i) ->
       d.time
 
@@ -23,9 +32,6 @@ $ ->
       .duration(500)
       .attr("x", (d,i) -> x(i-1) - .5)
       .remove()
-  setInterval ->
-    redraw(window.data["asdf"])
-  , 2000
   chart = d3.select("body")
     .append("svg:svg")
     .attr("class","chart")
